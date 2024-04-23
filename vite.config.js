@@ -5,9 +5,10 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: import.meta.env.NODE_ENV === 'production' ? '/nodejs_weak04_midExam/' : '/',
+  // base: import.meta.env.NODE_ENV === 'production' ? '/nodejs_weak04_midExam/' : '/',
+  base: '/nodejs_weak04_midExam/',
   plugins: [
-    vue(),
+    vue()
   ],
   resolve: {
     alias: {
