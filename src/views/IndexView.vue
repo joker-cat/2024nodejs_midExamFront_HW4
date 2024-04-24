@@ -31,6 +31,11 @@
 
 <script>
 export default {
+  created () {
+    this.$axios.get('/user')
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err))
+  },
   methods: {
     postArticle () {
       this.$router.push(this.localRouter === '張貼動態' ? '/post' : '/')
