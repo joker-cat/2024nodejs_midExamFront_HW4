@@ -8,7 +8,7 @@ const router = createRouter({
       name: 'index',
       component: () => import('../views/IndexView.vue'),
       children: [
-        { path: '', component: () => import('@/components/ArticleComponent.vue') },
+        { path: '/', component: () => import('@/components/ArticleComponent.vue') },
         { path: 'post', component: () => import('@/components/PostComponent.vue') }
       ]
     }

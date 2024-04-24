@@ -7,9 +7,9 @@
         <ul class="user-link p-0">
           <li class="d-flex align-items-center mb-4">
             <div>
-              <img class="user-icon" src="/images/user.jpg" alt="" />
+              <img class="user-icon" :src="getUserState.photo" alt="" />
             </div>
-            <span>邊緣小杰</span>
+            <span>{{ getUserState.name }}</span>
           </li>
           <li class="d-flex align-items-center mb-4">
             <div class="bg-icon">
@@ -30,18 +30,25 @@
 </template>
 
 <script>
+import statusStore from '@/stores/status.js'
+import { mapActions, mapState } from 'pinia'
 export default {
+  data () {
+    return {
+      user: {}
+    }
+  },
   created () {
-    this.$http.get('http://localhost:3005/user')
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err))
+    this.getUserAPI()
   },
   methods: {
+    ...mapActions(statusStore, ['getUserAPI']),
     postArticle () {
       this.$router.push(this.localRouter === '張貼動態' ? '/post' : '/')
     }
   },
   computed: {
+    ...mapState(statusStore, ['getUserState']),
     localRouter () {
       return {
         '/': '張貼動態',
@@ -80,6 +87,7 @@ export default {
         cursor: pointer;
       }
       .user-icon {
+        width: 50px;
         border-radius: 50%;
         margin-right: 16px;
       }

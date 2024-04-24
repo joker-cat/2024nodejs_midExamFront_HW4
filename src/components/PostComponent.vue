@@ -6,23 +6,51 @@
     </div>
     <div class="create">
       <p class="create-depiction">貼文內容</p>
-      <textarea name="textarea-font" id="textarea" cols="30" rows="10"></textarea>
+      <textarea name="textarea-font" id="textarea" cols="30" rows="10" v-model="content"></textarea>
       <input type="text" value="上傳圖片" class="input-btn" @click="showAlert" />
-      <img
-        class="show-image"
-        src="https://s.yimg.com/ny/api/res/1.2/v2ics1Z_DbOFT6wrjTaxGw--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTQyNw--/https://s.yimg.com/os/creatr-uploaded-images/2022-06/3757bb00-eca8-11ec-bf3f-7c2b69f1b53a"
-        alt="要上傳的圖片"
-      />
-      <button type="button" class="create-post d-block text-center mx-auto">送出貼文</button>
+      <img class="show-image" :src="image" alt="要上傳的圖片" />
+      <button type="button" class="create-post d-block text-center mx-auto" @click="pushArticle">
+        送出貼文
+      </button>
     </div>
   </div>
 </template>
 
 <script>
+import statusStore from '@/stores/status.js'
+import { mapState } from 'pinia'
+
 export default {
+  data () {
+    return {
+      image:
+        'https://s.yimg.com/ny/api/res/1.2/v2ics1Z_DbOFT6wrjTaxGw--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTQyNw--/https://s.yimg.com/os/creatr-uploaded-images/2022-06/3757bb00-eca8-11ec-bf3f-7c2b69f1b53a',
+      content: ''
+    }
+  },
+  computed: {
+    ...mapState(statusStore, ['getUserState'])
+  },
   methods: {
     showAlert () {
       alert('圖片寫死了')
+    },
+    pushArticle () {
+      const newArticle = {
+        image: this.image,
+        content: this.content,
+        user: this.getUserState._id
+      }
+      this.$http
+        .post('http://localhost:3005/post', newArticle)
+        .then((res) => {
+          if (res.statusText === 'OK') {
+            this.content = ''
+            alert('新增成功')
+            this.$router.push('/')
+          }
+        })
+        .catch((err) => console.log(err))
     }
   }
 }

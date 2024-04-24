@@ -3,7 +3,7 @@
     <nav class="d-flex justify-content-between align-items-center mx-auto">
       <h1 class="title-font">MetaWall</h1>
       <div class="member-content">
-        <img class="member-image" src="/images/user.jpg" alt="" />
+        <img class="member-image" :src="getUserState.photo" alt="" />
         <button class="member-center" type="button">Member</button>
       </div>
     </nav>
@@ -11,7 +11,13 @@
 </template>
 
 <script>
-export default {}
+import statusStore from '@/stores/status.js'
+import { mapState } from 'pinia'
+export default {
+  computed: {
+    ...mapState(statusStore, ['getUserState'])
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -34,6 +40,7 @@ export default {}
         width: 30px;
         height: 30px;
         margin-right: 10px;
+        border-radius: 50%;
       }
       .member-center {
         font: normal normal bold 16px/19px Azeret Mono;
