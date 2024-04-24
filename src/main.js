@@ -18,10 +18,10 @@ import FooterComponent from '@/components/FooterComponent.vue'
 
 const app = createApp(App)
 
-const api = import.meta.env.VITE_API
-app.config.globalProperties.$axios = axios.create({
-  baseURL: api
-})
+// const api = import.meta.env.VITE_API
+// app.config.globalProperties.$axios = axios.create({
+//   baseURL: api
+// })
 
 app.component('NavbarComponent', NavbarComponent)
 app.component('FooterComponent', FooterComponent)

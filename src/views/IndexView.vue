@@ -32,7 +32,7 @@
 <script>
 export default {
   created () {
-    this.$axios.get('/user')
+    this.$http.get('http://localhost:3005/user')
       .then((res) => console.log(res))
       .catch((err) => console.log(err))
   },
