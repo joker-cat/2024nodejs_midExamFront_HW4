@@ -1,11 +1,9 @@
 <script>
 import NavbarComponent from '@/components/NavbarComponent.vue'
-import FooterComponent from '@/components/FooterComponent.vue'
 
 export default {
   components: {
-    NavbarComponent,
-    FooterComponent
+    NavbarComponent
   }
 }
 </script>
@@ -16,12 +14,11 @@ export default {
     <div class="view">
       <router-view></router-view>
     </div>
-    <FooterComponent></FooterComponent>
   </div>
 </template>
 
 <style scoped>
-.container{
+.container {
   max-width: 1440px;
   height: 100vh;
   max-height: 1080px;

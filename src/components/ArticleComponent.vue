@@ -1,15 +1,37 @@
 <template>
-  <div class="scroll">
-    <div class="article-info" v-for="post in posts" :key="post.name">
-      <div class="d-flex post-userInfo">
-        <img class="post-userIcon" :src="post.icon" alt="發文者" />
-        <div>
-          <p class="post-name mb-0">{{ post.name }}</p>
-          <p class="post-time mb-0">{{ post.time }}</p>
+  <div class="article-content">
+    <div class="search-content d-flex justify-content-center">
+      <select id="select" v-model="isSelected" class="w-25">
+        <option
+          v-for="item in selectArray"
+          :key="item"
+          :value="item"
+          :selected="isSelected === '最新貼文'"
+        >
+          {{ item }}
+        </option>
+      </select>
+      <div class="w-75 position-relative">
+        <input type="text" class="input-search w-100" placeholder="搜尋貼文" />
+        <div class="position-absolute search-icon text-center">
+          <i class="bi bi-search"></i>
         </div>
       </div>
-      <div class="post-main">{{ post.main }}</div>
-      <img class="post-image" :src="post.image" alt="文章圖片" />
+    </div>
+    <div>
+      <div class="scroll">
+        <div class="article-info" v-for="post in posts" :key="post.name">
+          <div class="d-flex post-userInfo">
+            <img class="post-userIcon" :src="post.icon" alt="發文者" />
+            <div>
+              <p class="post-name mb-0">{{ post.name }}</p>
+              <p class="post-time mb-0">{{ post.time }}</p>
+            </div>
+          </div>
+          <div class="post-main">{{ post.main }}</div>
+          <img class="post-image" :src="post.image" alt="文章圖片" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -18,6 +40,8 @@
 export default {
   data () {
     return {
+      selectArray: ['最新貼文'],
+      isSelected: '最新貼文',
       posts: [
         {
           name: '邊緣小杰',
@@ -42,6 +66,38 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.article-content {
+  width: 100%;
+  max-width: 533px;
+  margin-right: 27px;
+  #select {
+    height: 46px;
+    width: 100%;
+    padding: 12px 16px;
+    margin: 0 12px 16px 0;
+    option {
+      height: 46px;
+      padding: 10px;
+    }
+  }
+  .input-search {
+    height: 46px;
+    padding: 12px 16px;
+  }
+  .search-icon {
+    width: 46px;
+    height: 46px;
+    top: 0;
+    right: 0;
+    font-size: 20px;
+    background-color: #03438d;
+    color: #ffffff;
+    i {
+      line-height: 46px;
+    }
+  }
+}
+
 .scroll {
   width: 100%;
   max-height: 700px;

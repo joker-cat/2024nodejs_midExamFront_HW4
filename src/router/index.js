@@ -5,8 +5,12 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: () => import('../views/IndexView.vue')
+      name: 'index',
+      component: () => import('../views/IndexView.vue'),
+      children: [
+        { path: '', component: () => import('@/components/ArticleComponent.vue') },
+        { path: 'post', component: () => import('@/components/PostComponent.vue') }
+      ]
     }
   ]
 })

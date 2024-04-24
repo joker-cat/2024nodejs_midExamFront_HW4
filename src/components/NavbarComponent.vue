@@ -23,6 +23,7 @@ export default {}
   nav {
     width: 870px;
     .title-font {
+      cursor: pointer;
       font: normal normal normal 26px/36px Paytone One;
       color: #000400;
     }

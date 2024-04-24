@@ -1,31 +1,9 @@
 <template>
   <div class="d-flex mx-0 justify-content-center">
-    <div class="article-content">
-      <div class="search-content d-flex justify-content-center">
-        <select id="select" v-model="isSelected" class="w-25">
-          <option
-            v-for="item in selectArray"
-            :key="item"
-            :value="item"
-            :selected="isSelected === '最新貼文'"
-          >
-            {{ item }}
-          </option>
-        </select>
-        <div class="w-75 position-relative">
-          <input type="text" class="input-search w-100" placeholder="搜尋貼文" />
-          <div class="position-absolute search-icon text-center">
-            <i class="bi bi-search"></i>
-          </div>
-        </div>
-      </div>
-      <div>
-        <ArticleComponent></ArticleComponent>
-      </div>
-    </div>
+    <router-view></router-view>
     <div class="user">
       <div class="user-control">
-        <button type="button" class="post-btn w-100">張貼動態</button>
+        <button type="button" class="post-btn w-100" @click="postArticle">{{ localRouter }}</button>
         <ul class="user-link p-0">
           <li class="d-flex align-items-center mb-4">
             <div>
@@ -52,53 +30,24 @@
 </template>
 
 <script>
-import ArticleComponent from '@/components/ArticleComponent.vue'
-
 export default {
-  data () {
-    return {
-      selectArray: ['最新貼文'],
-      isSelected: '最新貼文'
+  methods: {
+    postArticle () {
+      this.$router.push(this.localRouter === '張貼動態' ? '/post' : '/')
     }
   },
-  components: {
-    ArticleComponent
+  computed: {
+    localRouter () {
+      return {
+        '/': '張貼動態',
+        '/post': '返回首頁'
+      }[this.$route.path]
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.article-content {
-  width: 100%;
-  max-width: 533px;
-  margin-right: 27px;
-  #select {
-    height: 46px;
-    width: 100%;
-    padding: 12px 16px;
-    margin: 0 12px 16px 0;
-    option {
-      height: 46px;
-      padding: 10px;
-    }
-  }
-  .input-search {
-    height: 46px;
-    padding: 12px 16px;
-  }
-  .search-icon{
-    width: 46px;
-    height: 46px;
-    top: 0;
-    right: 0;
-    font-size: 20px;
-    background-color: #03438D;
-    color: #FFFFFF;
-    i{
-      line-height: 46px;
-    }
-  }
-}
 .user {
   width: 100%;
   max-width: 309px;
@@ -122,6 +71,9 @@ export default {
       list-style: none;
       font: normal normal bold 16px/24px Noto Sans TC;
       color: #000400;
+      li {
+        cursor: pointer;
+      }
       .user-icon {
         border-radius: 50%;
         margin-right: 16px;
