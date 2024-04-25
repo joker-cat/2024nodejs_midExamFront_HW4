@@ -7,8 +7,16 @@
     <div class="create">
       <p class="create-depiction">貼文內容</p>
       <textarea name="textarea-font" id="textarea" cols="30" rows="10" v-model="content"></textarea>
-      <input type="text" value="上傳圖片" class="input-btn" @click="showAlert" />
-      <img class="show-image" :src="image" alt="要上傳的圖片" />
+      <input
+        type="file"
+        name="file"
+        class="d-none"
+        id="fileInput"
+        ref="file"
+        @change="handleFileUpload"
+      />
+      <label for="fileInput" class="input-btn">選擇圖片</label>
+      <img class="show-image w-100" :src="image" alt="要上傳的圖片" />
       <button type="button" class="create-post d-block text-center mx-auto" @click="pushArticle">
         送出貼文
       </button>
@@ -23,34 +31,64 @@ import { mapState } from 'pinia'
 export default {
   data () {
     return {
-      image:
-        'https://s.yimg.com/ny/api/res/1.2/v2ics1Z_DbOFT6wrjTaxGw--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTQyNw--/https://s.yimg.com/os/creatr-uploaded-images/2022-06/3757bb00-eca8-11ec-bf3f-7c2b69f1b53a',
-      content: ''
+      image: '',
+      content: '',
+      file: ''
     }
   },
   computed: {
     ...mapState(statusStore, ['getUserState'])
   },
   methods: {
-    showAlert () {
-      alert('圖片寫死了')
+    // 獲得file選取的圖片資訊
+    handleFileUpload () {
+      this.file = this.$refs.file.files[0]
+      const reader = new FileReader()
+      reader.addEventListener('load', this.imageLoaded)
+      reader.readAsDataURL(this.file)
     },
-    pushArticle () {
-      const newArticle = {
-        image: this.image,
-        content: this.content,
-        user: this.getUserState._id
+    // 預覽圖片
+    imageLoaded (e) {
+      this.image = e.target.result
+    },
+    async updateImage () {
+      const formData = new FormData()
+      formData.append('image', this.file)
+      formData.append('album', import.meta.env.VITE_ALBUM)
+
+      return await this.$http.post(import.meta.env.VITE_POSTIMGURAPI, formData, {
+        headers: {
+          Authorization: import.meta.env.VITE_AUTHORIZATION // postman 上的 "Access Token"，可能之後會過期
+        }
+      })
+    },
+    // 送出貼文
+    async pushArticle () {
+      // 檢查是否不完整
+      if (this.image.trim() === '' || this.content.trim() === '') {
+        alert('請填寫完整內文及圖片')
+        return
       }
-      this.$http
-        .post('http://localhost:3005/post', newArticle)
-        .then((res) => {
-          if (res.statusText === 'OK') {
-            this.content = ''
-            alert('新增成功')
-            this.$router.push('/')
-          }
-        })
-        .catch((err) => console.log(err))
+      try {
+        const resultUpdateImage = await this.updateImage() // 上傳到Imgur
+        const link = resultUpdateImage.data.data.link // 取圖片連結
+        const newArticle = {
+          image: link,
+          content: this.content,
+          user: this.getUserState._id
+        }
+        // 存入資料庫
+        const resultPost = await this.$http.post(import.meta.env.VITE_SERVERAPI, newArticle)
+        if (resultPost.statusText === 'OK') {
+          this.image = ''
+          this.content = ''
+          this.file = ''
+          alert('新增成功')
+          this.$router.push('/')
+        }
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 }
@@ -114,12 +152,26 @@ export default {
       cursor: default;
     }
     .show-image {
-      width: 469px;
-      height: 157px;
+      display: block;
+      position: relative;
+      height: 200px;
       margin-bottom: 32px;
-      object-fit: cover;
+      object-fit: contain;
       border: 2px solid #000400;
       border-radius: 8px;
+      background: transparent;
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg?w=826');
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
     }
     .create-post {
       width: 323px;
