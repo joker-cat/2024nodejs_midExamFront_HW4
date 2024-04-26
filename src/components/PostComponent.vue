@@ -78,16 +78,15 @@ export default {
           user: this.getUserState._id
         }
         // 存入資料庫
-        const resultPost = await this.$http.post(`${import.meta.env.VITE_SERVERAPI}/post`, newArticle)
-        if (resultPost.statusText === 'OK') {
-          this.image = ''
-          this.content = ''
-          this.file = ''
-          alert('新增成功')
-          this.$router.push('/')
-        }
+        await this.$http.post(`${import.meta.env.VITE_SERVERAPI}/post`, newArticle)
+        this.image = ''
+        this.content = ''
+        this.file = ''
+        alert('新增成功')
+        this.$router.push('/')
       } catch (error) {
         console.error(error)
+        alert('新增失敗')
       }
     }
   }
