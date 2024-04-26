@@ -61,7 +61,7 @@ export default {
   methods: {
     getArticle () {
       this.$http
-        .get(`http://localhost:3005/post?timeSort=${this.sortArray}&q=${this.userSearch.trim()}`)
+        .get(`${import.meta.env.VITE_SERVERAPI}/post?timeSort=${this.sortArray}&q=${this.userSearch.trim()}`)
         .then((res) => {
           this.posts = res.data.data
         })

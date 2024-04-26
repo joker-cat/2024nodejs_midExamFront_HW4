@@ -13,7 +13,7 @@ export default defineStore('status', {
   actions: {
     getUserAPI (sort) {
       axios
-        .get('http://localhost:3005/user')
+        .get(`${import.meta.env.VITE_SERVERAPI}/user`)
         .then((res) => {
           this.user = res.data.data[0]
         })
