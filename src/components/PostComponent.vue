@@ -78,7 +78,7 @@ export default {
           user: this.getUserState._id
         }
         // 存入資料庫
-        const resultPost = await this.$http.post(import.meta.env.VITE_SERVERAPI, newArticle)
+        const resultPost = await this.$http.post(`${import.meta.env.VITE_SERVERAPI}/post`, newArticle)
         if (resultPost.statusText === 'OK') {
           this.image = ''
           this.content = ''
