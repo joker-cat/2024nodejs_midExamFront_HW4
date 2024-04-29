@@ -1,5 +1,6 @@
 <template>
   <div class="post-content">
+    <loading v-model:active="isLoading" :is-full-page="fullPage" />
     <div class="title">
       <h2 class="text-center">張貼動態</h2>
       <div class="empty-bg"></div>
@@ -27,13 +28,17 @@
 <script>
 import statusStore from '@/stores/status.js'
 import { mapState } from 'pinia'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/css/index.css'
 
 export default {
   data () {
     return {
       image: '',
       content: '',
-      file: ''
+      file: '',
+      isLoading: false,
+      fullPage: true
     }
   },
   computed: {
@@ -70,6 +75,7 @@ export default {
         return
       }
       try {
+        this.isLoading = true
         const resultUpdateImage = await this.updateImage() // 上傳到Imgur
         const link = resultUpdateImage.data.data.link // 取圖片連結
         const newArticle = {
@@ -83,12 +89,17 @@ export default {
         this.content = ''
         this.file = ''
         alert('新增成功')
+        this.isLoading = false
         this.$router.push('/')
       } catch (error) {
         console.error(error)
         alert('新增失敗')
+        this.isLoading = false
       }
     }
+  },
+  components: {
+    Loading
   }
 }
 </script>
