@@ -29,7 +29,7 @@
       <div class="scroll" v-else>
         <div class="article-info" v-for="post in posts" :key="post.name">
           <div class="d-flex post-userInfo">
-            <img class="post-userIcon" :src="post.user.image" alt="發文者" />
+            <img class="post-userIcon" :src="post.user.photo" alt="發文者" />
             <div>
               <p class="post-name mb-0">{{ post.user.name }}</p>
               <p class="post-time mb-0">{{ post.createdAt }}</p>
